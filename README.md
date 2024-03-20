@@ -16,10 +16,10 @@ allprojects {
 }
 ``` 
 #### Dependency
-[![](https://jitpack.io/v/org.bitbucket.droidhelios/Exporter.svg)](https://jitpack.io/#org.bitbucket.droidhelios/Exporter)
+[![](https://jitpack.io/v/appsfeature/exporter.svg)](https://jitpack.io/#appsfeature/exporter)
 ```gradle
 dependencies {
-    implementation 'org.bitbucket.droidhelios:Exporter:x.y'
+    implementation 'com.github.appsfeature:exporter:x.y'
 }
 ```   
 
@@ -49,48 +49,47 @@ In your activity class:
 In your activity class:
 #### Export in Text file
 ```java 
-    Exporter.getInstance(this).TextBuilder()
+    Exporter.getInstance().TextBuilder(this)
             .setFileName("SampleText")
-            .setFileBody("Hello World!")
-            .setListener(new Callback<File>() {
+            .setData(new ExporterData("Hello World!"))
+            .setListener(new ExporterCallback<File>() {
                 @Override
                 public void onSuccess(File result) {
-
+                    ExporterShare.shareFile(MainActivity.this, result);
                 }
 
                 @Override
                 public void onFailure(Exception e) {
-
+                    Toast.makeText(MainActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
                 }
             }).export();
 ```
 #### Export in CSV file
 ```java 
-    Exporter.getInstance(this).CsvBuilder()
+    Exporter.getInstance().CsvBuilder(this)
             .setFileName("SampleCsv")
-            .setCsvData(exporterList)
-            .setListener(new Callback<File>() {
+            .setData(new ExporterData(body, false))
+            .setListener(new ExporterCallback<File>() {
                 @Override
                 public void onSuccess(File result) {
-                    shareFile(MainActivity.this, result);
+                    ExporterShare.shareFile(MainActivity.this, result);
                 }
 
                 @Override
                 public void onFailure(Exception e) {
-
+                    Toast.makeText(MainActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
                 }
             }).export();
 ```
 #### Export in Excel file
 ```java 
-    Exporter.getInstance(this).ExcelBuilder()
+    Exporter.getInstance().ExcelBuilder(this)
             .setFileName("SampleExcel")
-            .setExcelData(exporterList)
-            .setListener(new Callback<File>() {
+            .setData(new ExporterData(body, true))
+            .setListener(new ExporterCallback<File>() {
                 @Override
                 public void onSuccess(File result) {
-                    Toast.makeText(MainActivity.this, "Success", Toast.LENGTH_SHORT).show();
-
+                    ExporterShare.shareFile(MainActivity.this, result);
                 }
 
                 @Override
@@ -105,10 +104,15 @@ In your activity class:
 
 For showing list of files. 
 ```java 
-    exportCsv.showListOfFiles(new Selector<File>() {
+    Exporter.getInstance().showListOfFiles(this, new ExporterSelector<File>() {
         @Override
         public void onSelect(File result) {
-            shareFile(MainActivity.this, result);
+            ExporterShare.shareFile(MainActivity.this, result);
         }
     });
+```
+
+For clear list of files.
+```java
+    Exporter.getInstance().clearListOfFiles(this);
 ```
