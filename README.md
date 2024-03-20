@@ -121,7 +121,7 @@ For clear list of files.
 ## ChangeLog
 
 #### Version 1.1:
-* Initial build
+* Supported excel format 'xls'
 * compileSdkVersion 30, poi-3.17.jar
 
 #### Version 1.0:
