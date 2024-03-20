@@ -31,7 +31,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-public class ExIntentShare {
+public class ExporterShare {
 
 //    public static Uri getUriFromFile(Context context, File file) {
 //        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
@@ -87,6 +87,10 @@ public class ExIntentShare {
     }
 
 
+    public static void shareFile(Context context, File file) {
+        Uri uri = ExFileUtils.getUriFromFile(context, file);
+        shareFile(context, uri, file.getName());
+    }
     public static void shareFile(Context context, Uri uri, String fileName) {
         Intent in = new Intent(Intent.ACTION_SEND);
         in.setDataAndType(uri, "application/TEXT");

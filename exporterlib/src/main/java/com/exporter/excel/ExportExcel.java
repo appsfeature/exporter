@@ -61,7 +61,7 @@ public class ExportExcel implements FileExporter {
     @Override
     public void export() {
         if (isValidFields()){
-            new ExportExcelTask(getDirectory(), fileName, mData.getExcelArray(), listener).execute();
+            new ExportExcelTask(getDirectory(), fileName, mData, listener).execute();
         }
     }
 

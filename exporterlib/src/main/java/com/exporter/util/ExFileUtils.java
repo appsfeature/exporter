@@ -11,6 +11,7 @@ import androidx.core.content.FileProvider;
 import com.exporter.R;
 
 import java.io.File;
+import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
@@ -79,4 +80,15 @@ public class ExFileUtils {
         return new File(context.getFilesDir(), FOLDER_NAME);
     }
 
+    public static void deleteFiles(File file) {
+        if (file != null && file.exists() && file.isDirectory()) {
+            String deleteCmd = "rm -r " + file;
+            Runtime runtime = Runtime.getRuntime();
+            try {
+                runtime.exec(deleteCmd);
+            } catch (IOException ignored) {
+            }
+        }
+
+    }
 }

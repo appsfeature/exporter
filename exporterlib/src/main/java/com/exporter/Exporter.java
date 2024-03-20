@@ -52,4 +52,11 @@ public class Exporter {
             dialog.show();
         }
     }
+
+    public void clearListOfFiles(Context context) {
+        clearListOfFiles(ExFileUtils.getDirectory(context));
+    }
+    public void clearListOfFiles(File rootDirectory) {
+        ExFileUtils.deleteFiles(rootDirectory);
+    }
 }

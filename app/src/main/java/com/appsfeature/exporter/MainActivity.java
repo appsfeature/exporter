@@ -1,39 +1,28 @@
 package com.appsfeature.exporter;
 
-import android.content.Context;
-import android.net.Uri;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.widget.Toast;
-
 import com.exporter.Exporter;
-import com.exporter.csv.ExportCsv;
-import com.exporter.excel.ExportExcel;
 import com.exporter.listener.ExporterCallback;
+import com.exporter.listener.ExporterSelector;
 import com.exporter.model.ExporterData;
 import com.exporter.sample.ExportSample;
-import com.exporter.text.ExportText;
-import com.exporter.util.ExIntentShare;
+import com.exporter.util.ExporterShare;
 
 import java.io.File;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
-
-    private ExportText exportText;
-    private ExportExcel exportExcel;
-    private ExportCsv exportCsv;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        List<List<String>> excelBody = ExportSample.getExporterList();
-        exportDataInExcelFile(excelBody);
     }
 
     private void exportDataInTextFile() {
@@ -43,12 +32,12 @@ public class MainActivity extends AppCompatActivity {
                 .setListener(new ExporterCallback<File>() {
                     @Override
                     public void onSuccess(File result) {
-
+                        ExporterShare.shareFile(MainActivity.this, result);
                     }
 
                     @Override
                     public void onFailure(Exception e) {
-
+                        Toast.makeText(MainActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
                     }
                 }).export();
     }
@@ -56,12 +45,11 @@ public class MainActivity extends AppCompatActivity {
     private void exportDataInExcelFile(List<List<String>> body) {
         Exporter.getInstance().ExcelBuilder(this)
                 .setFileName("SampleExcel")
-                .setData(new ExporterData(body))
+                .setData(new ExporterData(body, true))
                 .setListener(new ExporterCallback<File>() {
                     @Override
                     public void onSuccess(File result) {
-                        Toast.makeText(MainActivity.this, "Success", Toast.LENGTH_SHORT).show();
-
+                        ExporterShare.shareFile(MainActivity.this, result);
                     }
 
                     @Override
@@ -72,33 +60,47 @@ public class MainActivity extends AppCompatActivity {
                 }).export();
     }
 
-    private void exportDataInCsvFile(final Context context, List<List<String>> body) {
+    private void exportDataInCsvFile(List<List<String>> body) {
         Exporter.getInstance().CsvBuilder(this)
                 .setFileName("SampleCsv")
-                .setData(new ExporterData(body))
+                .setData(new ExporterData(body, false))
                 .setListener(new ExporterCallback<File>() {
                     @Override
                     public void onSuccess(File result) {
-                        shareFile(MainActivity.this, result);
+                        ExporterShare.shareFile(MainActivity.this, result);
                     }
 
                     @Override
                     public void onFailure(Exception e) {
-
+                        Toast.makeText(MainActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
                     }
                 }).export();
-//
-//        exportCsv.showListOfFiles(new Selector<File>() {
-//            @Override
-//            public void onSelect(File result) {
-//                shareFile(MainActivity.this, result);
-//            }
-//        });
     }
 
-    private void shareFile(Context context, File result) {
-        Uri uri = Utility.getUriFromFile(context, result);
-        ExIntentShare.sharePdfFileThroughEmail(context, uri, "", "Sample " + result.getName(), "PFA");
+    public void clickExcel(View view) {
+        List<List<String>> excelBody = ExportSample.getExporterList();
+        exportDataInExcelFile(excelBody);
     }
 
+    public void clickCSV(View view) {
+        List<List<String>> excelBody = ExportSample.getExporterList();
+        exportDataInCsvFile(excelBody);
+    }
+
+    public void clickText(View view) {
+        exportDataInTextFile();
+    }
+
+    public void clickList(View view) {
+        Exporter.getInstance().showListOfFiles(this, new ExporterSelector<File>() {
+            @Override
+            public void onSelect(File result) {
+                ExporterShare.shareFile(MainActivity.this, result);
+            }
+        });
+    }
+
+    public void clickClearList(View view) {
+        Exporter.getInstance().clearListOfFiles(this);
+    }
 }

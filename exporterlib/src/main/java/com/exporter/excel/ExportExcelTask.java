@@ -5,6 +5,7 @@ import android.util.Log;
 import android.widget.Toast;
 
 import com.exporter.listener.ExporterCallback;
+import com.exporter.model.ExporterData;
 import com.exporter.task.AsyncThread;
 import com.exporter.util.ExFileUtils;
 
@@ -30,11 +31,11 @@ public class ExportExcelTask extends AsyncThread<Void, Void, File> {
 
     private final File directory;
     private final String fileName;
-    private final List<List<String>> excelData;
+    private final ExporterData excelData;
     private final ExporterCallback<File> listener;
     private String errorMessage = "";
 
-    public ExportExcelTask(File directory, String fileName, List<List<String>> excelData, ExporterCallback<File> listener) {
+    public ExportExcelTask(File directory, String fileName, ExporterData excelData, ExporterCallback<File> listener) {
         this.fileName = ExFileUtils.getValidFileName(fileName, ExportExcel.EXTENSION);
         this.excelData = excelData;
         this.directory = directory;
@@ -71,20 +72,24 @@ public class ExportExcelTask extends AsyncThread<Void, Void, File> {
         Sheet sheet1 = wb.createSheet(fileName);
 
         // Generate column headings
-        for (int i = 0; i < excelData.size(); i++) {
+        for (int i = 0; i < excelData.getExcelArray().size(); i++) {
             Row row = sheet1.createRow(i);
-            List<String> rowList = excelData.get(i);
+            List<String> rowList = excelData.getExcelArray().get(i);
             for (int j = 0; j < rowList.size(); j++) {
                 if (i == 0) {
                     if (j == 0) {
-                        createHeaderRowColumn(sheet1, cell, row, cs, 100, j, "S.No.");
+                        if(excelData.isEnableColumnSerial()) {//serialNo
+                            createHeaderRowColumn(sheet1, cell, row, cs, 100, j, "S.No.");
+                        }
                         createHeaderRowColumn(sheet1, cell, row, cs, 100, j + 1, rowList.get(j));
                     } else {
                         createHeaderRowColumn(sheet1, cell, row, cs, 100, j + 1, rowList.get(j));
                     }
                 } else {
                     if (j == 0) {
-                        setRowEntry(cell, row, j, String.valueOf(i));//serialNo
+                        if(excelData.isEnableColumnSerial()) {
+                            setRowEntry(cell, row, j, String.valueOf(i));//serialNo
+                        }
                         setRowEntry(cell, row, j + 1, rowList.get(j));
                     } else {
                         setRowEntry(cell, row, j + 1, rowList.get(j));
