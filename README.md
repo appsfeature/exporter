@@ -4,7 +4,7 @@ Export support in following format: (txt, csv, xls)
 2. CSV file 
 3. Excel file 
  
-#### Library Size : 1.137 Mb 
+#### Library Size : 912KB
   
 ## Setup 
 Add this to your project build.gradle
@@ -116,3 +116,14 @@ For clear list of files.
 ```java
     Exporter.getInstance().clearListOfFiles(this);
 ```
+
+
+## ChangeLog
+
+#### Version 1.1:
+* Initial build
+* compileSdkVersion 30, poi-3.17.jar
+
+#### Version 1.0:
+* Initial build
+* compileSdkVersion 28, poi-3.17.jar
