@@ -29,7 +29,7 @@ public class ExportCsvTask extends AsyncThread<Void, Void, File> {
     protected File doInBackground(Void... voids) {
         try {
             return exportDataInCsvFile();
-        } catch (IOException e) {
+        } catch (Exception e) {
             e.printStackTrace();
             this.errorMessage = e.getMessage();
             return null;

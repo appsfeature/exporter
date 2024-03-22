@@ -13,7 +13,7 @@ import java.io.File;
 
 public class ExportExcel implements FileExporter {
 
-    public static final String EXTENSION = ".xls";
+    public static final String EXTENSION = ".xlsx";
     private final Context context;
     private String fileName;
     private ExporterCallback<File> listener;

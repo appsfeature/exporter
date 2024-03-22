@@ -120,10 +120,21 @@ For clear list of files.
 
 ## ChangeLog
 
+#### Version 1.2:
+* Library Size 5.8Mb
+* Supported format 'txt, csv, xlsx'
+* compileSdkVersion 30
+* Library : poi-3.6.jar
+
 #### Version 1.1:
-* Supported excel format 'xls'
-* compileSdkVersion 30, poi-3.17.jar
+* Library Size 5.8Mb
+* Supported format 'txt, csv, xls'
+* compileSdkVersion 30
+* Library : poi-3.17.jar
 
 #### Version 1.0:
 * Initial build
-* compileSdkVersion 28, poi-3.17.jar
+* Library Size
+* Supported format 'txt, csv, xls'
+* compileSdkVersion 28
+* Library : poi-3.17.jar

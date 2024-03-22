@@ -1,30 +1,21 @@
 package com.exporter.excel;
 
-import android.content.Context;
-import android.util.Log;
-import android.widget.Toast;
-
 import com.exporter.listener.ExporterCallback;
 import com.exporter.model.ExporterData;
 import com.exporter.task.AsyncThread;
 import com.exporter.util.ExFileUtils;
 
-import org.apache.poi.hssf.usermodel.HSSFCell;
-import org.apache.poi.hssf.usermodel.HSSFRow;
-import org.apache.poi.hssf.usermodel.HSSFSheet;
-import org.apache.poi.hssf.usermodel.HSSFWorkbook;
-import org.apache.poi.poifs.filesystem.POIFSFileSystem;
-import org.apache.poi.ss.usermodel.Cell;
-import org.apache.poi.ss.usermodel.CellStyle;
-import org.apache.poi.ss.usermodel.Row;
-import org.apache.poi.ss.usermodel.Sheet;
-import org.apache.poi.ss.usermodel.Workbook;
+
+import org.apache.poi.xssf.usermodel.XSSFCell;
+import org.apache.poi.xssf.usermodel.XSSFCellStyle;
+import org.apache.poi.xssf.usermodel.XSSFRow;
+import org.apache.poi.xssf.usermodel.XSSFSheet;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+
 
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.util.Iterator;
 import java.util.List;
 
 public class ExportExcelTask extends AsyncThread<Void, Void, File> {
@@ -46,7 +37,7 @@ public class ExportExcelTask extends AsyncThread<Void, Void, File> {
     protected File doInBackground(Void... voids) {
         try {
             return exportDataInExcelFile();
-        } catch (IOException e) {
+        } catch (Exception e) {
             e.printStackTrace();
             this.errorMessage = e.getMessage();
             return null;
@@ -65,15 +56,14 @@ public class ExportExcelTask extends AsyncThread<Void, Void, File> {
 
 
     private File exportDataInExcelFile() throws IOException {
-
-        Workbook wb = new HSSFWorkbook();
-        Cell cell = null;
-        CellStyle cs = null;
-        Sheet sheet1 = wb.createSheet(fileName);
+        XSSFWorkbook wb = new XSSFWorkbook();
+        XSSFCell cell = null;
+        XSSFCellStyle cs = null;
+        XSSFSheet sheet1 = wb.createSheet("Sheet1");
 
         // Generate column headings
         for (int i = 0; i < excelData.getExcelArray().size(); i++) {
-            Row row = sheet1.createRow(i);
+            XSSFRow row = sheet1.createRow(i);
             List<String> rowList = excelData.getExcelArray().get(i);
             for (int j = 0; j < rowList.size(); j++) {
                 if (i == 0) {
@@ -110,7 +100,7 @@ public class ExportExcelTask extends AsyncThread<Void, Void, File> {
     }
 
 
-    private Cell createHeaderRowColumn(Sheet sheet1, Cell cell, Row row, CellStyle cs, int width, int columnPosition, String columnName) {
+    private XSSFCell createHeaderRowColumn(XSSFSheet sheet1, XSSFCell cell, XSSFRow row, XSSFCellStyle cs, int width, int columnPosition, String columnName) {
         cell = row.createCell(columnPosition);
         cell.setCellValue(columnName);
 //        cell.setCellStyle(cs);
@@ -118,13 +108,13 @@ public class ExportExcelTask extends AsyncThread<Void, Void, File> {
         return cell;
     }
 
-    private Cell setRowEntry(Cell cell, Row multiRow, int listPos, String listValue) {
+    private XSSFCell setRowEntry(XSSFCell cell, XSSFRow multiRow, int listPos, String listValue) {
         cell = multiRow.createCell(listPos);
         cell.setCellValue(listValue);
         return cell;
     }
 
-    private Cell setRowEntry(Cell cell, Row multiRow, int listPos, String label, String[] data) {
+    private XSSFCell setRowEntry(XSSFCell cell, XSSFRow multiRow, int listPos, String label, String[] data) {
         cell = multiRow.createCell(listPos);
         cell.setCellValue(label);
         int columnIndex = 0;
@@ -135,40 +125,40 @@ public class ExportExcelTask extends AsyncThread<Void, Void, File> {
         return cell;
     }
 
-    private static void readExcelFile(Context context, String filename) {
-
-        try {
-            // Creating Input Stream
-            File file = new File(context.getExternalFilesDir(null), filename);
-            FileInputStream myInput = new FileInputStream(file);
-
-            // Create a POIFSFileSystem object
-            POIFSFileSystem myFileSystem = new POIFSFileSystem(myInput);
-
-            // Create a workbook using the File System
-            HSSFWorkbook myWorkBook = new HSSFWorkbook(myFileSystem);
-
-            // Get the first sheet from workbook
-            HSSFSheet mySheet = myWorkBook.getSheetAt(0);
-
-            /** We now need something to iterate through the cells.**/
-            Iterator<Row> rowIter = mySheet.rowIterator();
-
-            while (rowIter.hasNext()) {
-                HSSFRow myRow = (HSSFRow) rowIter.next();
-                Iterator<Cell> cellIter = myRow.cellIterator();
-                while (cellIter.hasNext()) {
-                    HSSFCell myCell = (HSSFCell) cellIter.next();
-                    Log.w("FileUtils", "Cell Value: " + myCell.toString());
-                    Toast.makeText(context, "cell Value: " + myCell.toString(), Toast.LENGTH_SHORT).show();
-                }
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-        return;
-    }
+//    private static void readExcelFile(Context context, String filename) {
+//
+//        try {
+//            // Creating Input Stream
+//            File file = new File(context.getExternalFilesDir(null), filename);
+//            FileInputStream myInput = new FileInputStream(file);
+//
+//            // Create a POIFSFileSystem object
+//            POIFSFileSystem myFileSystem = new POIFSFileSystem(myInput);
+//
+//            // Create a workbook using the File System
+//            HSSFWorkbook myWorkBook = new HSSFWorkbook(myFileSystem);
+//
+//            // Get the first sheet from workbook
+//            HSSFSheet mySheet = myWorkBook.getSheetAt(0);
+//
+//            /** We now need something to iterate through the cells.**/
+//            Iterator<Row> rowIter = mySheet.rowIterator();
+//
+//            while (rowIter.hasNext()) {
+//                HSSFRow myRow = (HSSFRow) rowIter.next();
+//                Iterator<Cell> cellIter = myRow.cellIterator();
+//                while (cellIter.hasNext()) {
+//                    HSSFCell myCell = (HSSFCell) cellIter.next();
+//                    Log.w("FileUtils", "Cell Value: " + myCell.toString());
+//                    Toast.makeText(context, "cell Value: " + myCell.toString(), Toast.LENGTH_SHORT).show();
+//                }
+//            }
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
+//
+//        return;
+//    }
 
 
 }

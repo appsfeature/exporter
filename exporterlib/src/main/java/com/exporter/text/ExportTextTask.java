@@ -28,7 +28,7 @@ public class ExportTextTask extends AsyncThread<Void, Void, File> {
 
         try {
             return saveTextFile(fileName, fileBody);
-        } catch (IOException e) {
+        } catch (Exception e) {
             e.printStackTrace();
             this.errorMessage = e.getMessage();
             return null;
