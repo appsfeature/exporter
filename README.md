@@ -1,5 +1,6 @@
 # Exporter
 Export support in following format: (txt, csv, xlsx)
+New Excel format support xlsx.
 1. Text file  
 2. CSV file 
 3. Excel file 
