@@ -1,5 +1,5 @@
 # Exporter
-Export support in following format: (txt, csv, xls)
+Export support in following format: (txt, csv, xlsx)
 1. Text file  
 2. CSV file 
 3. Excel file 
