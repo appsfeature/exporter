@@ -5,7 +5,7 @@ New Excel format support xlsx.
 2. CSV file 
 3. Excel file 
  
-#### Library Size : 912KB
+#### Library Size : 4.5MB
   
 ## Setup 
 Add this to your project build.gradle
